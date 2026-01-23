@@ -2,7 +2,7 @@
 
 require_once 'includes/init.php';
 
-// VERWERK TOEVOEGEN
+// voeg product toe aan winkelwagen
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $productId = $_POST['product_id'] ?? 0;
     $quantity = $_POST['quantity'] ?? 1;
@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         <main>
             <h2>Onze Producten</h2>
             
+            <!-- PRODUCT 1 -->
             <div class="product-grid">
                 <div class="product-card">
                     <h3>PHP Boek</h3>
@@ -120,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                         <button type="submit" class="add-btn">Toevoegen</button>
                     </form>
 
+                         <!-- product 6 -->
                     <div class="product-card">
                      <h3> resident evil 7</h3>
                     <p>horror game</p>

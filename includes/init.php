@@ -8,11 +8,11 @@ require_once __DIR__ . '/../classes/DigitalProduct.php';
 require_once __DIR__ . '/../classes/DiscountProduct.php';
 require_once __DIR__ . '/../classes/shoppingcart.php';
 
-// includes/init.php
+// Start session om winkelwagen te bewaren
 session_start();
 
 
-// Maak of haal winkelwagen op
+// Maak of haalt winkelwagen op
 if (!isset($_SESSION['winkelwagen'])) {
     $_SESSION['winkelwagen'] = new ShoppingCart();
 }

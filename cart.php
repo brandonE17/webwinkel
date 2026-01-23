@@ -2,7 +2,7 @@
 
 require_once 'includes/init.php';
 
-// VERWIJDEREN van item 
+// VERWIJDEREN van item  winkelwagen 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
     $productId = $_POST['product_id'] ?? 0;
     $winkelwagen->removeProduct($productId);
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
     exit;
 }
 
-// VERWERK LEGEN
+// WINKELWAGEN LEGEN
 if (isset($_GET['clear']) && $_GET['clear'] == 1) {
     $_SESSION['winkelwagen'] = new ShoppingCart();
     $winkelwagen = $_SESSION['winkelwagen'];
