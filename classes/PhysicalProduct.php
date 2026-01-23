@@ -1,5 +1,5 @@
 <?php
-// classes/PhysicalProduct.php
+
 
 
 require_once 'product.php';

@@ -1,5 +1,5 @@
 <?php
-// index.php - PRODUCTEN + TOEVOEGEN
+
 require_once 'includes/init.php';
 
 // VERWERK TOEVOEGEN
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                         <button type="submit" class="add-btn">Toevoegen</button>
                     </form>
                 </div>
-                
+                 
 
                 <!-- PRODUCT 2 -->
                 <div class="product-card">
