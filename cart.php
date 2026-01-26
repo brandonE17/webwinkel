@@ -30,7 +30,7 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
     <div class="container">
         <header>
             <h1>🛍️ Mijn Winkelwagen</h1>
-            <a href="index.php" class="back-link">← Terug</a>
+            <a href="index.php" class="terug-link">← Terug</a>
         </header>
         
         <main>
@@ -67,7 +67,7 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
                             <form method="post">
                                 <input type="hidden" name="remove_item" value="1">
                                 <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
-                                <button type="submit" class="remove-btn">Verwijder</button>
+                                <button type="submit" class="verwijder-knop">Verwijder</button>
                             </form>
                         </td>
                     </tr>

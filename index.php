@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     <div class="container">
         <header>
             <h1>🛒 Mijn Webwinkel</h1>
-            <div class="cart-info">
+            <div class="winkelwagen-info">
                 <a href="cart.php">Bekijk Winkelwagen (<?php echo count($winkelwagen->getItems()); ?> items)</a>
             </div>
         </header>
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
             <h2>Onze Producten</h2>
             
             <!-- PRODUCT 1 -->
-            <div class="product-grid">
+            <div class="product-rooster">
                 <div class="product-card">
                     <h3>PHP Boek</h3>
                     <p>Leer PHP programmeren</p>
