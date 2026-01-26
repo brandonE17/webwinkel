@@ -20,12 +20,12 @@ class ShoppingCart {
         return false;
     }
     
-    // DEZE METHOD TOEVOEGEN:
+    
     public function getItems() {
         return $this->items;
     }
     
-    // Optioneel: andere methods die je nodig hebt
+    
     public function updateQuantity($productId, $newQuantity) {
         // implementatie
     }

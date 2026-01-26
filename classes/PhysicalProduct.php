@@ -1,7 +1,7 @@
 <?php
 
 
-
+//laden van de basis Product class
 require_once 'product.php';
 
 class PhysicalProduct extends Product {
@@ -13,8 +13,7 @@ class PhysicalProduct extends Product {
         $this->gewicht = $gewicht;
     }
     
-    public function display() {
-        // Gebruik de display() method van Product en voeg gewicht toe 
+    public function display() { 
         return parent::display() . " (" . $this->gewicht . "kg)";
     }
     

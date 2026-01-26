@@ -8,7 +8,7 @@ require_once __DIR__ . '/../classes/DigitalProduct.php';
 require_once __DIR__ . '/../classes/DiscountProduct.php';
 require_once __DIR__ . '/../classes/shoppingcart.php';
 
-// Start session om winkelwagen te bewaren
+
 session_start();
 
 

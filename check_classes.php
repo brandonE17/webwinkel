@@ -1,5 +1,5 @@
 <?php
-// check_classes.php
+// ai test script om te controleren of alle class bestanden bestaan en geladen kunnen worden
 echo "<h1>Class Bestanden Check</h1>";
 
 $classes = [
@@ -24,7 +24,7 @@ foreach ($classes as $class) {
              htmlspecialchars(substr($content, 0, 100)) . 
              "...</pre>";
         
-        // Check of het een class bevat
+        // Check of het een class bevat, zodat het kan regristeren
         if (strpos($content, 'class ') !== false) {
             echo "✅ Bevat een class definitie<br>";
         } else {
