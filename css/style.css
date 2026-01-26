@@ -85,17 +85,17 @@ h1 {
     
 }
 
-.cart-table {
+.winkelwagen-tabel {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
 }
 
-.cart-table th, .cart-table td {
+.winkelwagen-tabel th, .winkelwagen-tabel td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
-}
+} 
 
 .cart-table th {
     background: #f2f2f2;

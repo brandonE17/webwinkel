@@ -40,7 +40,7 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
                     <a href="index.php" class="btn">Ga winkelen</a>
                 </div>
             <?php else: ?>
-                <table class="cart-table">
+                <table class="winkelwagen-tabel">
                     <tr>
                         <th>Product</th>
                         <th>Aantal</th>
