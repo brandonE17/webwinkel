@@ -36,7 +36,7 @@ foreach ($classes as $class) {
     echo "<hr>";
 }
 
-// Test laden
+// Test laden van classes en maken van objecten
 echo "<h2>Test classes laden:</h2>";
 try {
     require_once 'classes/Product.php';

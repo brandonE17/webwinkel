@@ -1,5 +1,6 @@
 <?php
 
+// laad init bestand
 require_once 'includes/init.php';
 
 // voeg product toe aan winkelwagen

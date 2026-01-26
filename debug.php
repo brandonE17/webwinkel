@@ -1,5 +1,5 @@
 <?php
-// debug.php file
+// file om te testen of PHP werkt door fouten weer te geven en een simpele class te maken
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
