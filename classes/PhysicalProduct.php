@@ -20,6 +20,7 @@ class PhysicalProduct extends Product {
     public function getGewicht() {
         return $this->gewicht;
     }
+    // reken verzendkosten op basis van gewicht
     
     public function calculateShipping() {
         

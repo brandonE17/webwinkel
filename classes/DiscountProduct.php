@@ -1,5 +1,5 @@
 <?php
-
+// laad de basis Product class
 require_once 'Product.php';
 
 class DiscountProduct extends Product {
