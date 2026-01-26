@@ -35,7 +35,7 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
         
         <main>
             <?php if (empty($winkelwagen->getItems())): ?>
-                <div class="empty-cart">
+                <div class="lege-winkelwagen">
                     <p>Je winkelwagen is leeg.</p>
                     <a href="index.php" class="btn">Ga winkelen</a>
                 </div>

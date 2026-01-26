@@ -127,11 +127,11 @@ h1 {
     background: #e74c3c;
 }
 
-.empty-cart {
+.lege-winkelwagen {
     text-align: center;
     padding: 40px;
 }
 
-.empty-cart .btn {
+.lege-winkelwagen .btn {
     margin-top: 20px;
 }
