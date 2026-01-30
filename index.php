@@ -35,7 +35,7 @@ $max_price = isset($_GET['max_price']) ? floatval($_GET['max_price']) : 10000;
 $gefilterde_producten = array_filter($alle_producten, function($product) use ($search, $selected_category, $min_price, $max_price) {
     $prijs = $product->getPrice();
     $naam = strtolower($product->getNaam());
-    $kategorie = $product->getKategorie();
+    $categorie = $product->getCategorie();
     
     // Check zoeken
     if ($search && strpos($naam, $search) === false) {
@@ -43,7 +43,7 @@ $gefilterde_producten = array_filter($alle_producten, function($product) use ($s
     }
     
     // Check categorie
-    if ($selected_category && $kategorie !== $selected_category) {
+    if ($selected_category && $categorie !== $selected_category) {
         return false;
     }
     
@@ -56,7 +56,7 @@ $gefilterde_producten = array_filter($alle_producten, function($product) use ($s
 });
 
 // Haal unieke categorieën op
-$categorieën = array_unique(array_map(function($p) { return $p->getKategorie(); }, $alle_producten));
+$categorieën = array_unique(array_map(function($p) { return $p->getCategorie(); }, $alle_producten));
 sort($categorieën);
 ?>
 ?>
@@ -123,7 +123,7 @@ sort($categorieën);
             <div class="product-rooster">
                 <?php foreach ($gefilterde_producten as $product): ?>
                 <div class="product-card">
-                    <span class="product-category"><?php echo $product->getKategorie(); ?></span>
+                    <span class="product-category"><?php echo $product->getCategorie(); ?></span>
                     <h3><?php echo $product->getNaam(); ?></h3>
                     <p><?php echo $product->display(); ?></p>
                     <p class="price">€<?php echo number_format($product->getPrice(), 2, ',', '.'); ?></p>

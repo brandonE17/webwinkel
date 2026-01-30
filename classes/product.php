@@ -25,6 +25,10 @@ class Product {
         return $this->id;
     }
     
+    public function getCategorie() {
+        return $this->kategorie;
+    }
+    
     public function display() {
         return $this->naam . " - €" . number_format($this->prijs, 2, ',', '.');
     }
