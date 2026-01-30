@@ -4,11 +4,13 @@ class Product {
     protected $id;
     protected $naam;
     protected $prijs;
+    protected $kategorie;
     
-    public function __construct($id, $naam, $prijs) {
+    public function __construct($id, $naam, $prijs, $kategorie = "Overig") {
         $this->id = $id;
         $this->naam = $naam;
-        $this->prijs = $prijs; 
+        $this->prijs = $prijs;
+        $this->kategorie = $kategorie;
     }
     
     public function getNaam() {

@@ -3,27 +3,62 @@
 // laad init bestand
 require_once 'includes/init.php';
 
+// Alle producten met categorieën
+$alle_producten = [
+    1 => new PhysicalProduct(1, "PHP Boek", 49.99, 0.5, "Boeken"),
+    2 => new DigitalProduct(2, "PHP Cursus", 79.99, 250, "Cursussen"),
+    3 => new PhysicalProduct(3, "Gaming Mouse", 69.99, 0.3, "Hardware"),
+    4 => new DiscountProduct(4, "Web Bundle", 199.99, 15, "Bundels")
+];
+
 // voeg product toe aan winkelwagen
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $productId = $_POST['product_id'] ?? 0;
     $quantity = $_POST['quantity'] ?? 1;
     
-    // Maak product aan
-    $producten = [
-        1 => new PhysicalProduct(1, "PHP Boek", 49.99, 0.5),
-        2 => new DigitalProduct(2, "PHP Cursus", 79.99, 250),
-        3 => new PhysicalProduct(3, "Gaming Mouse", 69.99, 0.3),
-        4 => new DiscountProduct(4, "Web Bundle", 199.99, 15)
-    ];
-    
-    if (isset($producten[$productId])) {
-        $winkelwagen->addProduct($producten[$productId], $quantity);
+    if (isset($alle_producten[$productId])) {
+        $winkelwagen->addProduct($alle_producten[$productId], $quantity);
     }
     
     // Refresh pagina
     header("Location: index.php");
     exit;
 }
+
+// Haal filter/zoek parameters op
+$search = isset($_GET['search']) ? strtolower(trim($_GET['search'])) : '';
+$selected_category = isset($_GET['category']) ? $_GET['category'] : '';
+$min_price = isset($_GET['min_price']) ? floatval($_GET['min_price']) : 0;
+$max_price = isset($_GET['max_price']) ? floatval($_GET['max_price']) : 10000;
+
+// Filter producten
+$gefilterde_producten = array_filter($alle_producten, function($product) use ($search, $selected_category, $min_price, $max_price) {
+    $prijs = $product->getPrice();
+    $naam = strtolower($product->getNaam());
+    $kategorie = $product->getKategorie();
+    
+    // Check zoeken
+    if ($search && strpos($naam, $search) === false) {
+        return false;
+    }
+    
+    // Check categorie
+    if ($selected_category && $kategorie !== $selected_category) {
+        return false;
+    }
+    
+    // Check prijs
+    if ($prijs < $min_price || $prijs > $max_price) {
+        return false;
+    }
+    
+    return true;
+});
+
+// Haal unieke categorieën op
+$categorieën = array_unique(array_map(function($p) { return $p->getKategorie(); }, $alle_producten));
+sort($categorieën);
+?>
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -44,99 +79,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         <main>
             <h2>Onze Producten</h2>
             
-            <!-- PRODUCT 1 -->
-            <div class="product-rooster">
-                <div class="product-card">
-                    <h3>PHP Boek</h3>
-                    <p>Leer PHP programmeren</p>
-                    <p class="price">€49,99</p>
-                    <p>Gewicht: 0.5kg</p>
+            <!-- Zoeken & Filteren -->
+            <div class="filter-container">
+                <form method="get" class="filter-form">
+                    <div class="filter-group">
+                        <input type="text" name="search" placeholder="Zoeken..." value="<?php echo htmlspecialchars($search); ?>" class="search-input">
+                        <button type="submit" class="search-btn">🔍</button>
+                    </div>
                     
-                    <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="1">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-                    </form>
-                </div>
-                 
-
-                <!-- PRODUCT 2 -->
-                <div class="product-card">
-                    <h3>PHP Cursus</h3>
-                    <p>Online cursus</p>
-                    <p class="price">€79,99</p>
-                    <p>Bestand: 250MB</p>
+                    <div class="filter-group">
+                        <label for="category">Categorie:</label>
+                        <select name="category" id="category">
+                            <option value="">Alle</option>
+                            <?php foreach ($categorieën as $cat): ?>
+                                <option value="<?php echo $cat; ?>" <?php echo ($selected_category === $cat) ? 'selected' : ''; ?>>
+                                    <?php echo $cat; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     
-                    <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="2">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-                    </form>
-                </div>
-                
-                <!-- PRODUCT 3 -->
-                <div class="product-card">
-                    <h3>Gaming Mouse</h3>
-                    <p>Precisie muis</p>
-                    <p class="price">€69,99</p>
-                    <p>Gewicht: 0.3kg</p>
+                    <div class="filter-group">
+                        <label for="min_price">Min prijs:</label>
+                        <input type="number" name="min_price" id="min_price" value="<?php echo $min_price; ?>" min="0" step="0.01">
+                    </div>
                     
-                    <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="3">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-                    </form>
-                </div>
-                
-                <!-- PRODUCT 4 -->
-                <div class="product-card">
-                    <h3>Web Bundle</h3>
-                    <p>Complete bundle</p>
-                    <p class="price"><s>€199,99</s> €169,99</p>
-                    <p>15% korting</p>
-
-               
+                    <div class="filter-group">
+                        <label for="max_price">Max prijs:</label>
+                        <input type="number" name="max_price" id="max_price" value="<?php echo $max_price; ?>" min="0" step="0.01">
+                    </div>
                     
-                    <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="4">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-                    </form>
-
-                     <!-- product 5 -->
-                <div class="product-card">
-                    <h3>Digital Art Pack</h3>
-                    <p>Collectie van digitale kunstwerken</p>
-                    <p class="price"><s>200</s> 160</s> </p> 
-                    <p>20% korting</p>
-
-
-                         <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="4">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-                    </form>
-
-                         <!-- product 6 -->
-                    <div class="product-card">
-                     <h3> resident evil 7</h3>
-                    <p>horror game</p>
-                    <p class="price">20.00</p>
-                    
-                        <form method="post">
-                        <input type="hidden" name="add_to_cart" value="1">
-                        <input type="hidden" name="product_id" value="5">
-                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
-                        <button type="submit" class="add-btn">Toevoegen</button>
-
-                        </form>
-                </div>
+                    <button type="submit" class="filter-btn">Filter</button>
+                    <a href="index.php" class="reset-btn">Reset</a>
+                </form>
             </div>
+            
+            <!-- Producten -->
+            <?php if (empty($gefilterde_producten)): ?>
+                <div class="no-results">
+                    <p>Geen producten gevonden met deze filters.</p>
+                </div>
+            <?php else: ?>
+            <div class="product-rooster">
+                <?php foreach ($gefilterde_producten as $product): ?>
+                <div class="product-card">
+                    <span class="product-category"><?php echo $product->getKategorie(); ?></span>
+                    <h3><?php echo $product->getNaam(); ?></h3>
+                    <p><?php echo $product->display(); ?></p>
+                    <p class="price">€<?php echo number_format($product->getPrice(), 2, ',', '.'); ?></p>
+                    
+                    <form method="post">
+                        <input type="hidden" name="add_to_cart" value="1">
+                        <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
+                        <button type="submit" class="add-btn">Toevoegen</button>
+                    </form>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </main>
     </div>
 </body>

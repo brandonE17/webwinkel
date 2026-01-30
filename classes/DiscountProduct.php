@@ -5,8 +5,8 @@ require_once 'Product.php';
 class DiscountProduct extends Product {
     private $discountPercentage;
     
-    public function __construct($id, $naam, $prijs, $discountPercentage) {
-        parent::__construct($id, $naam, $prijs);
+    public function __construct($id, $naam, $prijs, $discountPercentage, $kategorie = "Overig") {
+        parent::__construct($id, $naam, $prijs, $kategorie);
         $this->discountPercentage = $discountPercentage;
     }
     
