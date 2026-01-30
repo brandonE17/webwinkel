@@ -5,8 +5,8 @@ require_once 'product.php';
 class DigitalProduct extends Product {
     private $fileSize;
     
-    public function __construct($id, $naam, $prijs, $fileSize, $kategorie = "Overig") {
-        parent::__construct($id, $naam, $prijs, $kategorie);
+    public function __construct($id, $naam, $prijs, $fileSize, $categorie = "Overig") {
+        parent::__construct($id, $naam, $prijs, $categorie);
         $this->fileSize = $fileSize;
     }
      

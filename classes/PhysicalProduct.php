@@ -7,9 +7,9 @@ require_once 'product.php';
 class PhysicalProduct extends Product {
     private $gewicht;
     
-    public function __construct($id, $naam, $prijs, $gewicht, $kategorie = "Overig") {
+    public function __construct($id, $naam, $prijs, $gewicht, $categorie = "Overig") {
         // Roep de constructor van de class aan
-        parent::__construct($id, $naam, $prijs, $kategorie);
+        parent::__construct($id, $naam, $prijs, $categorie);
         $this->gewicht = $gewicht;
     }
     
