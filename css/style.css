@@ -232,7 +232,6 @@ h1 {
 }
 
 .form-input:focus {
-    outline: none;
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
@@ -246,7 +245,6 @@ h1 {
     border-radius: 3px;
     font-size: 1.1em;
     font-weight: bold;
-    cursor: pointer;
     margin-top: 20px;
     transition: background 0.3s;
 }
@@ -316,7 +314,6 @@ h1 {
     color: white;
     padding: 5px 10px;
     border-radius: 3px;
-    border: none;
     cursor: pointer;
     font-size: 0.9em;
 }
