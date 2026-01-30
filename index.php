@@ -3,13 +3,29 @@
 // laad init bestand
 require_once 'includes/init.php';
 
-// Alle producten met categorieën
-$alle_producten = [
-    1 => new PhysicalProduct(1, "PHP Boek", 49.99, 0.5, "Boeken"),
-    2 => new DigitalProduct(2, "PHP Cursus", 79.99, 250, "Cursussen"),
-    3 => new PhysicalProduct(3, "Gaming Mouse", 69.99, 0.3, "Hardware"),
-    4 => new DiscountProduct(4, "Web Bundle", 199.99, 15, "Bundels")
-];
+// Laad producten van database
+$alle_producten = [];
+try {
+    $alle_producten = DatabaseProduct::getProductsFromDB($db);
+    
+    // Fallback: als geen database producten, gebruik defaults
+    if (empty($alle_producten)) {
+        $alle_producten = [
+            1 => new PhysicalProduct(1, "PHP Boek", 49.99, 0.5, "Boeken"),
+            2 => new DigitalProduct(2, "PHP Cursus", 79.99, 250, "Cursussen"),
+            3 => new PhysicalProduct(3, "Gaming Mouse", 69.99, 0.3, "Hardware"),
+            4 => new DiscountProduct(4, "Web Bundle", 199.99, 15, "Bundels")
+        ];
+    }
+} catch (Exception $e) {
+    // Als database niet beschikbaar, gebruik defaults
+    $alle_producten = [
+        1 => new PhysicalProduct(1, "PHP Boek", 49.99, 0.5, "Boeken"),
+        2 => new DigitalProduct(2, "PHP Cursus", 79.99, 250, "Cursussen"),
+        3 => new PhysicalProduct(3, "Gaming Mouse", 69.99, 0.3, "Hardware"),
+        4 => new DiscountProduct(4, "Web Bundle", 199.99, 15, "Bundels")
+    ];
+}
 
 // voeg product toe aan winkelwagen
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
@@ -74,6 +90,7 @@ sort($categorieën);
             <div class="header-links">
                 <a href="orderhistory.php" class="nav-link">📋 Mijn Bestellingen</a>
                 <a href="cart.php" class="nav-link">Bekijk Winkelwagen (<?php echo count($winkelwagen->getItems()); ?> items)</a>
+                <a href="admin.php" class="nav-link admin-link">🔧 Admin</a>
             </div>
         </header>
         
