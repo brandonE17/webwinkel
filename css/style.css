@@ -135,3 +135,202 @@ h1 {
 .lege-winkelwagen .btn {
     margin-top: 20px;
 }
+
+/* Checkout pagina styles */
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.checkout-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.checkout-summary h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.order-items {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item .price {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.order-totals {
+    margin-top: 20px;
+}
+
+.order-total-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    color: #666;
+}
+
+.order-total-line.total {
+    padding: 15px 0;
+    border-top: 2px solid #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.checkout-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.checkout-form h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 1em;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.checkout-btn {
+    width: 100%;
+    background: #4CAF50;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 3px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+    background: #45a049;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+.confirmation-container {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f0f8f0;
+    border-radius: 5px;
+    border: 2px solid #4CAF50;
+}
+
+.confirmation-message h2 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+.email-display {
+    background: white;
+    padding: 10px;
+    border-radius: 3px;
+    color: #e74c3c;
+    font-size: 1.1em;
+    margin: 15px 0;
+}
+
+.order-details {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 30px 0;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.order-details h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.order-details p {
+    line-height: 1.8;
+    color: #666;
+}
+
+.confirmation-actions {
+    margin-top: 30px;
+}
+
+.update-btn {
+    background: #3498db;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.update-btn:hover {
+    background: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

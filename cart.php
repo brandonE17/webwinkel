@@ -11,6 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
     exit;
 }
 
+// HOEVEELHEID BIJWERKEN
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_quantity'])) {
+    $productId = $_POST['product_id'] ?? 0;
+    $newQuantity = $_POST['quantity'] ?? 1;
+    $winkelwagen->updateQuantity($productId, intval($newQuantity));
+    header("Location: cart.php");
+    exit;
+}
+
 // WINKELWAGEN LEGEN
 if (isset($_GET['clear']) && $_GET['clear'] == 1) {
     $_SESSION['winkelwagen'] = new ShoppingCart();
@@ -60,7 +69,14 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
                     ?>
                     <tr>
                         <td><?php echo $product->display(); ?></td>
-                        <td><?php echo $quantity; ?></td>
+                        <td>
+                            <form method="post" style="display: flex; gap: 5px;">
+                                <input type="hidden" name="update_quantity" value="1">
+                                <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                                <input type="number" name="quantity" value="<?php echo $quantity; ?>" min="1" class="qty-input" style="width: 50px;">
+                                <button type="submit" class="update-btn">Update</button>
+                            </form>
+                        </td>
                         <td>€<?php echo number_format($prijs, 2, ',', '.'); ?></td>
                         <td>€<?php echo number_format($subtotaal, 2, ',', '.'); ?></td>
                         <td>
@@ -81,6 +97,7 @@ if (isset($_GET['clear']) && $_GET['clear'] == 1) {
                 
                 <div class="cart-actions">
                     <a href="index.php" class="btn">Verder winkelen</a>
+                    <a href="checkout.php" class="btn checkout-btn">Afrekenen</a>
                     <a href="cart.php?clear=1" class="btn clear-btn">Winkelwagen legen</a>
                 </div>
             <?php endif; ?>

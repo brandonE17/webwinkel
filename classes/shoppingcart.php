@@ -27,7 +27,17 @@ class ShoppingCart {
     
     
     public function updateQuantity($productId, $newQuantity) {
-        // implementatie
+        foreach ($this->items as $index => $item) {
+            if ($item['product']->getId() == $productId) {
+                if ($newQuantity <= 0) {
+                    array_splice($this->items, $index, 1);
+                } else {
+                    $this->items[$index]['quantity'] = $newQuantity;
+                }
+                return true;
+            }
+        }
+        return false;
     }
     
     public function clearCart() {
