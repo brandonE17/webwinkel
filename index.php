@@ -71,8 +71,9 @@ sort($categorieën);
     <div class="container">
         <header>
             <h1>🛒 Mijn Webwinkel</h1>
-            <div class="winkelwagen-info">
-                <a href="cart.php">Bekijk Winkelwagen (<?php echo count($winkelwagen->getItems()); ?> items)</a>
+            <div class="header-links">
+                <a href="orderhistory.php" class="nav-link">📋 Mijn Bestellingen</a>
+                <a href="cart.php" class="nav-link">Bekijk Winkelwagen (<?php echo count($winkelwagen->getItems()); ?> items)</a>
             </div>
         </header>
         

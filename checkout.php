@@ -3,31 +3,120 @@
 // laad init bestand
 require_once 'includes/init.php';
 
-// VERWERKt de bESTELLING met gegevens uit het formulier
+// Validatiefunctie
+function validateEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function validatePostcode($postcode) {
+    // Nederlands/Belgisch postcode format (1234 AB of 1234AB)
+    return preg_match('/^[0-9]{4}\s?[A-Z]{2}$/i', trim($postcode));
+}
+
+function validatePhoneNumber($phone) {
+    // Telefoonnummer met cijfers en spaties/streepjes
+    return preg_match('/^[\d\s\-\+\(\)]{7,}$/', trim($phone));
+}
+
+function validateName($name) {
+    // Minimaal 2 karakters, alleen letters en spaties
+    return preg_match('/^[a-zA-ZÀ-ÿ\s]{2,}$/u', trim($name));
+}
+
+// VERWERK BESTELLING
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
-    $voornaam = htmlspecialchars($_POST['voornaam'] ?? '');
-    $achternaam = htmlspecialchars($_POST['achternaam'] ?? '');
-    $email = htmlspecialchars($_POST['email'] ?? '');
-    $adres = htmlspecialchars($_POST['adres'] ?? '');
-    $plaats = htmlspecialchars($_POST['plaats'] ?? '');
-    $postcode = htmlspecialchars($_POST['postcode'] ?? '');
+    $voornaam = htmlspecialchars(trim($_POST['voornaam'] ?? ''));
+    $achternaam = htmlspecialchars(trim($_POST['achternaam'] ?? ''));
+    $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+    $adres = htmlspecialchars(trim($_POST['adres'] ?? ''));
+    $plaats = htmlspecialchars(trim($_POST['plaats'] ?? ''));
+    $postcode = htmlspecialchars(trim($_POST['postcode'] ?? ''));
+    $telefoon = htmlspecialchars(trim($_POST['telefoon'] ?? ''));
     
+    $errors = [];
     
-    if (!$voornaam || !$achternaam || !$email || !$adres || !$plaats || !$postcode) {
-        $error = "Vul alle velden in!";
-    } elseif (empty($winkelwagen->getItems())) {
-        $error = "Winkelwagen is leeg!";
-    } else {
-        // Bestelling succesvol 
-        $_SESSION['order_placed'] = true;
-        $_SESSION['order_data'] = [
+    // Validaties
+    if (!$voornaam) {
+        $errors[] = "Voornaam is verplicht.";
+    } elseif (!validateName($voornaam)) {
+        $errors[] = "Voornaam mag alleen letters bevatten (minimaal 2 karakters).";
+    }
+    
+    if (!$achternaam) {
+        $errors[] = "Achternaam is verplicht.";
+    } elseif (!validateName($achternaam)) {
+        $errors[] = "Achternaam mag alleen letters bevatten (minimaal 2 karakters).";
+    }
+    
+    if (!$email) {
+        $errors[] = "E-mailadres is verplicht.";
+    } elseif (!validateEmail($email)) {
+        $errors[] = "Voer een geldig e-mailadres in (bijv. naam@voorbeeld.nl).";
+    }
+    
+    if (!$adres) {
+        $errors[] = "Adres is verplicht.";
+    } elseif (strlen($adres) < 5) {
+        $errors[] = "Adres moet minstens 5 karakters lang zijn.";
+    }
+    
+    if (!$plaats) {
+        $errors[] = "Plaats is verplicht.";
+    } elseif (!validateName($plaats)) {
+        $errors[] = "Plaats mag alleen letters bevatten.";
+    }
+    
+    if (!$postcode) {
+        $errors[] = "Postcode is verplicht.";
+    } elseif (!validatePostcode($postcode)) {
+        $errors[] = "Voer een geldige postcode in (bijv. 1234 AB).";
+    }
+    
+    if ($telefoon && !validatePhoneNumber($telefoon)) {
+        $errors[] = "Voer een geldig telefoonnummer in.";
+    }
+    
+    if (empty($winkelwagen->getItems())) {
+        $errors[] = "Je winkelwagen is leeg!";
+    }
+    
+    if (empty($errors)) {
+        // Bestelling succesvol - voeg toe aan ordergeschiedenis
+        if (!isset($_SESSION['orders'])) {
+            $_SESSION['orders'] = [];
+        }
+        
+        $order_id = uniqid('ORDER_');
+        $order_details = [
+            'order_id' => $order_id,
             'voornaam' => $voornaam,
             'achternaam' => $achternaam,
             'email' => $email,
             'adres' => $adres,
             'plaats' => $plaats,
-            'postcode' => $postcode
+            'postcode' => $postcode,
+            'telefoon' => $telefoon,
+            'items' => $winkelwagen->getItems(),
+            'subtotaal' => 0,
+            'verzendkosten' => 0,
+            'totaal' => 0,
+            'datum' => date('Y-m-d H:i:s')
         ];
+        
+        // Bereken totalen voor order
+        foreach ($order_details['items'] as $item) {
+            $product = $item['product'];
+            $quantity = $item['quantity'];
+            $order_details['subtotaal'] += $product->getPrice() * $quantity;
+            if (method_exists($product, 'calculateShipping')) {
+                $order_details['verzendkosten'] += $product->calculateShipping() * $quantity;
+            }
+        }
+        $order_details['totaal'] = $order_details['subtotaal'] + $order_details['verzendkosten'];
+        
+        $_SESSION['orders'][] = $order_details;
+        $_SESSION['order_placed'] = true;
+        $_SESSION['order_data'] = $order_details;
         $_SESSION['winkelwagen'] = new ShoppingCart();
         $winkelwagen = $_SESSION['winkelwagen'];
         header("Location: bevestiging.php");
@@ -111,9 +200,14 @@ $totaal = $subtotaal + $verzendkosten;
                     <div class="checkout-form">
                         <h2>Afleveradres</h2>
                         
-                        <?php if (isset($error)): ?>
-                            <div class="error-message">
-                                ⚠️ <?php echo $error; ?>
+                        <?php if (!empty($errors)): ?>
+                            <div class="error-container">
+                                <h3>⚠️ Controleer de volgende fouten:</h3>
+                                <ul class="error-list">
+                                    <?php foreach ($errors as $error): ?>
+                                        <li><?php echo $error; ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </div>
                         <?php endif; ?>
                         
@@ -121,32 +215,37 @@ $totaal = $subtotaal + $verzendkosten;
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="voornaam">Voornaam *</label>
-                                    <input type="text" id="voornaam" name="voornaam" required class="form-input">
+                                    <input type="text" id="voornaam" name="voornaam" required class="form-input" value="<?php echo isset($voornaam) ? $voornaam : ''; ?>" pattern="[a-zA-ZÀ-ÿ\s]{2,}">
                                 </div>
                                 <div class="form-group">
                                     <label for="achternaam">Achternaam *</label>
-                                    <input type="text" id="achternaam" name="achternaam" required class="form-input">
+                                    <input type="text" id="achternaam" name="achternaam" required class="form-input" value="<?php echo isset($achternaam) ? $achternaam : ''; ?>" pattern="[a-zA-ZÀ-ÿ\s]{2,}">
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label for="email">E-mailadres *</label>
-                                <input type="email" id="email" name="email" required class="form-input">
+                                <input type="email" id="email" name="email" required class="form-input" value="<?php echo isset($email) ? $email : ''; ?>">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telefoon">Telefoonnummer</label>
+                                <input type="tel" id="telefoon" name="telefoon" class="form-input" placeholder="+31 6 12345678" value="<?php echo isset($telefoon) ? $telefoon : ''; ?>">
                             </div>
                             
                             <div class="form-group">
                                 <label for="adres">Adres *</label>
-                                <input type="text" id="adres" name="adres" placeholder="Straat + huisnummer" required class="form-input">
+                                <input type="text" id="adres" name="adres" placeholder="Straat + huisnummer" required class="form-input" value="<?php echo isset($adres) ? $adres : ''; ?>" minlength="5">
                             </div>
                             
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="postcode">Postcode *</label>
-                                    <input type="text" id="postcode" name="postcode" placeholder="1234 AB" required class="form-input">
+                                    <input type="text" id="postcode" name="postcode" placeholder="1234 AB" required class="form-input" value="<?php echo isset($postcode) ? $postcode : ''; ?>" pattern="[0-9]{4}\s?[A-Z]{2}">
                                 </div>
                                 <div class="form-group">
                                     <label for="plaats">Plaats *</label>
-                                    <input type="text" id="plaats" name="plaats" required class="form-input">
+                                    <input type="text" id="plaats" name="plaats" required class="form-input" value="<?php echo isset($plaats) ? $plaats : ''; ?>" pattern="[a-zA-ZÀ-ÿ\s]{2,}">
                                 </div>
                             </div>
                             
