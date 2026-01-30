@@ -62,4 +62,4 @@ CREATE TABLE IF NOT EXISTS order_items (
     hoeveelheid INT NOT NULL,
     prijs DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id)
-);
+); 
