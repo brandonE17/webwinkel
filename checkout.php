@@ -3,7 +3,7 @@
 // laad init bestand
 require_once 'includes/init.php';
 
-// VERWERK BESTELLING
+// VERWERKt de bESTELLING met gegevens uit het formulier
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
     $voornaam = htmlspecialchars($_POST['voornaam'] ?? '');
     $achternaam = htmlspecialchars($_POST['achternaam'] ?? '');
@@ -12,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
     $plaats = htmlspecialchars($_POST['plaats'] ?? '');
     $postcode = htmlspecialchars($_POST['postcode'] ?? '');
     
-    // Basis validatie
+    
     if (!$voornaam || !$achternaam || !$email || !$adres || !$plaats || !$postcode) {
         $error = "Vul alle velden in!";
     } elseif (empty($winkelwagen->getItems())) {
         $error = "Winkelwagen is leeg!";
     } else {
-        // Bestelling succesvol - in echte app zou je dit in database opslaan
+        // Bestelling succesvol 
         $_SESSION['order_placed'] = true;
         $_SESSION['order_data'] = [
             'voornaam' => $voornaam,
@@ -69,12 +69,11 @@ $totaal = $subtotaal + $verzendkosten;
         <main>
             <?php if (empty($winkelwagen->getItems())): ?>
                 <div class="lege-winkelwagen">
-                    <p>Je winkelwagen is leeg. Je kunt niet afrekenen.</p>
+                    <p>Je winkelwagen is leeg.. Je kunt niet afrekenen.</p>
                     <a href="index.php" class="btn">Ga winkelen</a>
                 </div>
             <?php else: ?>
                 <div class="checkout-container">
-                    <!-- Links: Bestelling Samenvatting -->
                     <div class="checkout-summary">
                         <h2>Bestelling Samenvatting</h2>
                         <div class="order-items">
@@ -108,7 +107,7 @@ $totaal = $subtotaal + $verzendkosten;
                         </div>
                     </div>
                     
-                    <!-- Rechts: Adresformulier -->
+                    <!-- Adresformulier -->
                     <div class="checkout-form">
                         <h2>Afleveradres</h2>
                         

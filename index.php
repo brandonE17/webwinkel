@@ -37,7 +37,7 @@ $gefilterde_producten = array_filter($alle_producten, function($product) use ($s
     $naam = strtolower($product->getNaam());
     $categorie = $product->getCategorie();
     
-    // Check zoeken
+    // check zoekterm
     if ($search && strpos($naam, $search) === false) {
         return false;
     }
@@ -47,7 +47,7 @@ $gefilterde_producten = array_filter($alle_producten, function($product) use ($s
         return false;
     }
     
-    // Check prijs
+    // Checkt de prijs
     if ($prijs < $min_price || $prijs > $max_price) {
         return false;
     }
