@@ -19,7 +19,7 @@ class DigitalProduct extends Product {
     }
     
     public function calculateShipping() {
-        return 0; // Geen verzendkosten voor digitale producten
+        return 0; 
     }
 }
 ?> 
