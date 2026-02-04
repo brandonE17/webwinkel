@@ -3,6 +3,11 @@
 // laad init bestand
 require_once 'includes/init.php';
 
+// Check database connection
+if (!isset($db) || $db === null) {
+    die("Database connection failed!");
+}
+
 // Check ingelogd
 $logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'];
 
